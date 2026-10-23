@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agula – Digitalisierung für Kanzleien & Unternehmen</title>
+<meta name="description" content="Thomas Göttel begleitet Kanzleien und Unternehmen auf der Reise in eine digitale und gleichzeitig menschliche Zukunft. DATEV, Prozesse, Teams.">
+<link rel="icon" href="https://agula-entwicklung.de/favicon.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0c1511;
+  --forest:#12201a;
+  --forest-2:#1a2e25;
+  --moss:#2d4a3e;
+  --sage:#9fb5a5;
+  --paper:#f4f0e8;
+  --paper-2:#ebe5d9;
+  --copper:#c8925a;
+  --copper-2:#e5bd8f;
+  --line-d:rgba(244,240,232,.14);
+  --line-l:rgba(12,21,17,.14);
+  --serif:"Fraunces", Georgia, serif;
+  --sans:"Inter Tight", system-ui, -apple-system, sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --gutter:clamp(20px,5vw,80px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{background:var(--forest);color:var(--paper);font-family:var(--sans);font-weight:400;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.loading{overflow:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;max-width:100%}
+::selection{background:var(--copper);color:var(--ink)}
+.serif{font-family:var(--serif);font-weight:300;letter-spacing:-.02em}
+.it{font-style:italic;color:var(--copper)}
+.eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;display:inline-flex;align-items:center;gap:14px;color:var(--sage)}
+.eyebrow::before{content:"";width:28px;height:1px;background:currentColor;opacity:.7}
+.light .eyebrow{color:var(--moss)}
+.wrap{padding-inline:var(--gutter);max-width:1600px;margin-inline:auto}
+section{position:relative}
+.light{background:var(--paper);color:var(--ink)}
+
+/* grain */
+.grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:200;opacity:.035;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-5%)}60%{transform:translate(-2%,4%)}80%{transform:translate(5%,2%)}100%{transform:translate(0,0)}}
+
+/* preloader */
+.loader{position:fixed;inset:0;z-index:300;background:var(--ink);display:grid;place-items:center;overflow:hidden}
+.loader__word{font-family:var(--serif);font-size:clamp(48px,8vw,120px);font-weight:300;letter-spacing:-.04em;display:flex;overflow:hidden;line-height:1}
+.loader__word span{display:inline-block;transform:translateY(110%)}
+.loader__word span:last-child{color:var(--copper);font-style:italic}
+.loader__count{position:absolute;right:var(--gutter);bottom:var(--gutter);font-family:var(--serif);font-size:clamp(40px,6vw,88px);font-weight:300;color:var(--sage);font-variant-numeric:tabular-nums}
+.loader__bar{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--copper);transform-origin:left;transform:scaleX(0)}
+.loader__tag{position:absolute;left:var(--gutter);bottom:var(--gutter);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--sage)}
+
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:22px var(--gutter);transition:transform .6s var(--ease),background .4s,padding .4s}
+.nav.is-scrolled{background:rgba(12,21,17,.72);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);padding-block:14px;border-bottom:1px solid var(--line-d)}
+.nav.is-hidden{transform:translateY(-100%)}
+.logo{font-family:var(--serif);font-size:30px;font-weight:400;letter-spacing:-.03em;line-height:1;display:flex;align-items:baseline;gap:2px}
+.logo i{color:var(--copper);font-size:38px;line-height:0}
+.nav__links{display:flex;gap:36px;font-size:14px;letter-spacing:.02em}
+.nav__links a{position:relative;padding-block:6px;opacity:.82;transition:opacity .3s}
+.nav__links a:hover{opacity:1}
+.nav__links a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--copper);transform:scaleX(0);transform-origin:right;transition:transform .6s var(--ease)}
+.nav__links a:hover::after{transform:scaleX(1);transform-origin:left}
+.pill{display:inline-flex;align-items:center;gap:12px;padding:12px 14px 12px 22px;border-radius:999px;font-size:14px;font-weight:500;letter-spacing:.01em;border:1px solid var(--line-d);transition:background .4s,color .4s,border-color .4s;position:relative;overflow:hidden;isolation:isolate}
+.pill::before{content:"";position:absolute;inset:0;background:var(--copper-2);transform:translateY(101%);border-radius:inherit;transition:transform .6s var(--ease);z-index:-1}
+.pill:hover::before{transform:translateY(0)}
+.pill:hover{color:var(--ink);border-color:transparent}
+.pill__dot{width:26px;height:26px;border-radius:50%;background:var(--copper);display:grid;place-items:center;color:var(--ink);transition:transform .6s var(--ease)}
+.pill:hover .pill__dot{transform:rotate(-45deg);background:var(--ink);color:var(--copper-2)}
+.pill--solid{background:var(--paper);color:var(--ink);border-color:transparent}
+.burger{display:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line-d);position:relative}
+.burger span{position:absolute;left:13px;right:13px;height:1px;background:var(--paper);transition:transform .5s var(--ease)}
+.burger span:first-child{top:18px}.burger span:last-child{top:25px}
+.menu-open .burger span:first-child{transform:translateY(3.5px) rotate(45deg)}
+.menu-open .burger span:last-child{transform:translateY(-3.5px) rotate(-45deg)}
+.mobile-menu{position:fixed;inset:0;z-index:99;background:var(--ink);display:flex;flex-direction:column;justify-content:center;padding:var(--gutter);gap:8px;clip-path:circle(0% at calc(100% - 42px) 42px);transition:clip-path .9s var(--ease)}
+.menu-open .mobile-menu{clip-path:circle(150% at calc(100% - 42px) 42px)}
+.mobile-menu a{font-family:var(--serif);font-size:clamp(40px,11vw,64px);font-weight:300;letter-spacing:-.03em;line-height:1.15}
+.mobile-menu a:nth-child(even){font-style:italic;color:var(--copper)}
+@media (max-width:900px){.nav__links,.nav .pill{display:none}.burger{display:block}}
+
+/* hero */
+.hero{height:100svh;min-height:640px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;background:radial-gradient(120% 90% at 70% 10%,#1f3a2e 0%,var(--forest) 45%,var(--ink) 100%)}
+#flow{position:absolute;inset:0;width:100%;height:100%}
+.hero__veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,21,17,.0) 40%,rgba(12,21,17,.85) 100%);pointer-events:none}
+.hero__inner{position:relative;z-index:2;padding-bottom:clamp(36px,6vh,72px)}
+.hero__meta{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:clamp(24px,4vh,48px);flex-wrap:wrap}
+.hero h1{font-family:var(--serif);font-weight:300;font-size:clamp(42px,7vw,128px);line-height:.98;letter-spacing:-.04em;font-variation-settings:"opsz" 144}
+.hero h1 .line{display:block;overflow:hidden;padding-bottom:.08em}
+.hero h1 .line > span{display:inline-block}
+.hero h1 em{font-style:italic;color:var(--copper-2)}
+.hero__bottom{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end;margin-top:clamp(28px,5vh,56px);padding-top:28px;border-top:1px solid var(--line-d)}
+.hero__lede{max-width:520px;color:rgba(244,240,232,.75);font-size:clamp(15px,1.2vw,18px)}
+.hero__ctas{display:flex;gap:12px;flex-wrap:wrap}
+.scroll-ind{display:flex;align-items:center;gap:14px;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--sage)}
+.scroll-ind__line{width:1px;height:48px;background:var(--line-d);position:relative;overflow:hidden}
+.scroll-ind__line::after{content:"";position:absolute;inset:0;background:var(--copper-2);animation:drip 2.2s var(--ease) infinite}
+@keyframes drip{0%{transform:translateY(-100%)}60%,100%{transform:translateY(100%)}}
+@media (max-width:760px){.hero__bottom{grid-template-columns:1fr}}
+
+/* manifest */
+.manifest{padding:clamp(120px,20vh,240px) 0}
+.manifest__text{font-family:var(--serif);font-weight:300;font-size:clamp(30px,4.4vw,76px);line-height:1.08;letter-spacing:-.035em;max-width:15ch}
+.manifest__text .w{opacity:.13;transition:none}
+.manifest__text em{font-style:italic;color:var(--copper-2)}
+.manifest__grid{display:grid;grid-template-columns:1fr 1.6fr;gap:var(--gutter);align-items:start}
+.manifest__side{position:sticky;top:120px;color:rgba(244,240,232,.65);max-width:340px;font-size:16px}
+.manifest__side p+p{margin-top:16px}
+@media (max-width:900px){.manifest__grid{grid-template-columns:1fr}.manifest__side{position:static}}
+
+/* values: stacked cards */
+.values{padding:clamp(100px,14vh,180px) 0 clamp(60px,10vh,120px)}
+.values__head{display:flex;justify-content:space-between;align-items:end;gap:40px;margin-bottom:clamp(48px,8vh,96px);flex-wrap:wrap}
+.h2{font-family:var(--serif);font-weight:300;font-size:clamp(36px,5vw,84px);line-height:.98;letter-spacing:-.04em}
+.h2 em{font-style:italic;color:var(--copper)}
+.values__head p{max-width:380px;color:rgba(12,21,17,.65)}
+.stack{display:flex;flex-direction:column;gap:6vh}
+.card{position:sticky;top:calc(96px + var(--i) * 22px);background:var(--paper-2);border:1px solid var(--line-l);border-radius:28px;overflow:hidden;display:grid;grid-template-columns:1.05fr 1fr;min-height:min(72vh,680px);transform-origin:50% 0;will-change:transform}
+.card:nth-child(2){background:#e4ddcd}
+.card:nth-child(3){background:var(--forest-2);color:var(--paper);border-color:var(--line-d)}
+.card__media{position:relative;overflow:hidden}
+.card__media img{position:absolute;inset:-8% 0;width:100%;height:116%;object-fit:cover;filter:saturate(.85) contrast(1.02)}
+.card__num{position:absolute;left:24px;top:22px;font-family:var(--serif);font-size:15px;font-style:italic;color:var(--paper);line-height:1;padding:9px 14px;border-radius:999px;background:rgba(12,21,17,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.card__body{padding:clamp(28px,4vw,64px);display:flex;flex-direction:column;justify-content:space-between;gap:28px}
+.card__body h3{font-family:var(--serif);font-weight:300;font-size:clamp(28px,3vw,50px);line-height:1.05;letter-spacing:-.03em}
+.card__label{font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--copper);margin-bottom:12px}
+.card__approach{font-size:clamp(16px,1.2vw,19px);line-height:1.55;opacity:.85}
+.more{border-top:1px solid currentColor;border-color:var(--line-l)}
+.card:nth-child(3) .more{border-color:var(--line-d)}
+.more__btn{display:flex;justify-content:space-between;align-items:center;width:100%;padding:18px 0 4px;font-size:14px;font-weight:500;letter-spacing:.02em}
+.plus{width:34px;height:34px;border-radius:50%;border:1px solid currentColor;position:relative;opacity:.8;transition:transform .6s var(--ease),background .4s}
+.plus::before,.plus::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:1px;background:currentColor;transform:translate(-50%,-50%)}
+.plus::after{transform:translate(-50%,-50%) rotate(90deg);transition:transform .6s var(--ease)}
+.is-open .plus{transform:rotate(180deg)}
+.is-open .plus::after{transform:translate(-50%,-50%) rotate(0)}
+.more__panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .8s var(--ease)}
+.is-open > .more__panel{grid-template-rows:1fr}
+.more__panel > div{overflow:hidden}
+.more__panel p{padding-top:16px;font-size:15px;line-height:1.65;opacity:.75}
+@media (max-width:900px){.card{grid-template-columns:1fr;min-height:0;top:calc(80px + var(--i) * 14px)}.card__media{height:38vh}}
+
+/* journey: horizontal */
+.journey{background:var(--ink);overflow:hidden}
+.journey__intro{padding:clamp(100px,14vh,180px) 0 clamp(40px,6vh,72px)}
+.journey__intro .h2{max-width:12ch}
+.journey__intro-row{display:flex;justify-content:space-between;align-items:end;gap:40px;flex-wrap:wrap}
+.journey__intro p{max-width:380px;color:rgba(244,240,232,.65)}
+.track-wrap{position:relative;height:100svh;display:flex;align-items:center}
+.track{display:flex;gap:0;padding-left:var(--gutter);will-change:transform;position:relative}
+.route{position:absolute;left:0;top:50%;height:200px;transform:translateY(-50%);pointer-events:none;overflow:visible}
+.route path{fill:none;stroke:var(--copper);stroke-width:1.5;stroke-linecap:round}
+.route .route__bg{stroke:var(--line-d);stroke-dasharray:3 9}
+.station{flex:0 0 auto;width:min(78vw,520px);padding-right:clamp(40px,6vw,110px);position:relative}
+.station__dot{width:18px;height:18px;border-radius:50%;background:var(--ink);border:1.5px solid var(--copper);margin-bottom:36px;position:relative;z-index:2;transition:background .5s,box-shadow .5s}
+.station.is-active .station__dot{background:var(--copper);box-shadow:0 0 0 8px rgba(200,146,90,.15),0 0 40px rgba(200,146,90,.5)}
+.station__n{font-family:var(--serif);font-size:clamp(52px,5vw,84px);font-weight:300;line-height:.8;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1px rgba(229,189,143,.45);margin-bottom:24px}
+.station h3{font-family:var(--serif);font-weight:300;font-size:clamp(26px,2.4vw,38px);line-height:1.08;letter-spacing:-.025em;margin-bottom:18px;max-width:16ch}
+.station p{color:rgba(244,240,232,.68);font-size:16px;max-width:42ch}
+.station__split{display:grid;gap:12px;margin-top:20px}
+.station__split div{border:1px solid var(--line-d);border-radius:16px;padding:16px 18px;font-size:14px;color:rgba(244,240,232,.75)}
+.station__split b{display:block;font-weight:500;color:var(--copper-2);margin-bottom:4px;font-size:12px;letter-spacing:.18em;text-transform:uppercase}
+.station--end{width:min(80vw,640px)}
+.station--end .station__dot{margin-bottom:60px}
+.station--end .serif{font-size:clamp(36px,4vw,64px);line-height:1.02}
+.journey__progress{position:absolute;left:var(--gutter);right:var(--gutter);bottom:clamp(24px,5vh,48px);display:flex;align-items:center;gap:20px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--sage)}
+.journey__progress-bar{flex:1;height:1px;background:var(--line-d);position:relative}
+.journey__progress-bar i{position:absolute;inset:0;background:var(--copper);transform-origin:left;transform:scaleX(0)}
+@media (max-width:900px){
+  .track-wrap{height:auto;display:block;padding-bottom:80px}
+  .track{flex-direction:column;padding-right:var(--gutter);gap:56px}
+  .station{width:100%;padding:0 0 0 36px;border-left:1px solid var(--line-d)}
+  .station__dot{position:absolute;left:-9px;top:0;margin:0}
+  .route,.journey__progress{display:none}
+}
+
+/* services */
+.services{padding:clamp(100px,14vh,180px) 0}
+.services__head{display:grid;grid-template-columns:1.3fr 1fr;gap:var(--gutter);align-items:end;margin-bottom:clamp(48px,8vh,96px)}
+.services__head p{color:rgba(12,21,17,.68)}
+.services__claim{font-family:var(--serif);font-style:italic;color:var(--copper);font-size:20px;margin-top:20px;display:block}
+.svc{border-top:1px solid var(--line-l)}
+.svc:last-child{border-bottom:1px solid var(--line-l)}
+.svc__row{width:100%;display:grid;grid-template-columns:90px 1fr auto;gap:24px;align-items:center;padding:clamp(22px,3vw,38px) 0;text-align:left;position:relative}
+.svc__row::before{content:"";position:absolute;inset:0 calc(var(--gutter) * -1);background:var(--paper-2);opacity:0;transition:opacity .5s;z-index:0}
+.svc__row > *{position:relative;z-index:1;transition:color .5s,transform .7s var(--ease)}
+.svc__row:hover::before,.svc.is-open .svc__row::before{opacity:1}
+.svc__row:hover .svc__title{transform:translateX(6px)}
+.svc__n{font-family:var(--serif);font-style:italic;font-size:22px;color:var(--copper)!important}
+.svc__title{font-family:var(--serif);font-weight:300;font-size:clamp(24px,2.8vw,44px);line-height:1.05;letter-spacing:-.03em}
+.svc__body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .9s var(--ease);background:var(--paper-2);color:var(--ink);margin-inline:calc(var(--gutter) * -1)}
+.svc.is-open .svc__body{grid-template-rows:1fr}
+.svc__body > div{overflow:hidden}
+.svc__inner{display:grid;grid-template-columns:90px 1.4fr 1fr;gap:24px;padding:0 var(--gutter) clamp(36px,5vw,64px)}
+.svc__list{list-style:none;columns:2;column-gap:40px}
+.svc__list li{break-inside:avoid;padding:10px 0;border-bottom:1px solid var(--line-l);font-size:15px;color:rgba(12,21,17,.78);display:flex;gap:12px}
+.svc__list li::before{content:"";flex:0 0 6px;height:6px;border-radius:50%;background:var(--copper);margin-top:9px}
+.svc__list li.sub{color:var(--moss);font-family:var(--serif);font-style:italic;font-size:18px;border-bottom:0;padding-top:16px}
+.svc__list li.sub::before{display:none}
+.svc__why{align-self:start;border-left:1px solid var(--copper);padding-left:24px}
+.svc__why b{display:block;font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--copper);margin-bottom:10px}
+.svc__why p{font-family:var(--serif);font-weight:300;font-size:clamp(22px,2vw,30px);line-height:1.2;letter-spacing:-.02em}
+.svc__row .plus{color:var(--ink)}
+@media (max-width:900px){.services__head{grid-template-columns:1fr}.svc__row{grid-template-columns:44px 1fr auto}.svc__inner{grid-template-columns:1fr}.svc__inner > span{display:none}.svc__list{columns:1}}
+
+/* clients marquee */
+.clients{padding:clamp(80px,12vh,140px) 0;border-top:1px solid var(--line-l);overflow:hidden}
+.clients__head{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:56px;flex-wrap:wrap}
+.clients__head .serif{font-size:clamp(34px,4.4vw,72px);line-height:1}
+.logos{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media (max-width:900px){.logos{grid-template-columns:repeat(2,1fr)}}
+.client{height:180px;border-radius:24px;background:#fff;border:1px solid var(--line-l);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;transition:transform .6s var(--ease),box-shadow .6s var(--ease)}
+.client img{max-height:64px;max-width:72%;object-fit:contain;filter:grayscale(1) contrast(1.1);opacity:.75;transition:filter .5s,opacity .5s}
+.client span{font-size:12px;letter-spacing:.06em;color:rgba(12,21,17,.55);text-align:center}
+.client:hover{box-shadow:0 20px 40px -28px rgba(12,21,17,.3)}
+.client:hover img{filter:none;opacity:1}
+
+/* about */
+.about{padding:clamp(100px,14vh,180px) 0;overflow:hidden}
+.about__grid{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(40px,7vw,120px);align-items:center}
+.portrait{position:relative;aspect-ratio:4/5;border-radius:28px;overflow:hidden;clip-path:inset(18% 18% 18% 18% round 28px)}
+.portrait img{position:absolute;inset:-10% 0;width:100%;height:120%;object-fit:cover;transform:scale(1.25)}
+.portrait__tag{position:absolute;left:20px;bottom:20px;right:20px;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-radius:16px;background:rgba(12,21,17,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-size:13px}
+.portrait__tag b{font-weight:500}
+.about__text .h2{margin:22px 0 32px}
+.about__text p{color:rgba(244,240,232,.72);max-width:54ch}
+.about__text p + p{margin-top:16px}
+.about__text strong{color:var(--paper);font-weight:500}
+.dest{list-style:none;margin-top:36px;display:grid;gap:0}
+.dest li{display:grid;grid-template-columns:auto 1fr;gap:16px;padding:16px 0;border-top:1px solid var(--line-d);font-size:16px}
+.dest li i{font-family:var(--serif);color:var(--copper);font-size:14px;padding-top:3px}
+@media (max-width:900px){.about__grid{grid-template-columns:1fr}.portrait{max-width:460px}}
+
+/* quote */
+.quote{padding:clamp(120px,20vh,240px) 0;text-align:center;overflow:hidden;background:radial-gradient(60% 60% at 50% 50%,rgba(200,146,90,.12),transparent 70%),var(--ink)}
+.quote blockquote{font-family:var(--serif);font-weight:300;font-size:clamp(34px,5.2vw,92px);line-height:1.04;letter-spacing:-.035em;max-width:14ch;margin-inline:auto}
+.quote blockquote em{color:var(--copper-2)}
+.quote .ch{display:inline-block;opacity:0;transform:translateY(25%)}
+.quote figcaption{margin-top:40px;color:var(--sage);font-size:14px;letter-spacing:.06em}
+
+/* cv */
+.cv{padding:clamp(100px,14vh,180px) 0}
+.cv__head{display:flex;justify-content:space-between;align-items:end;gap:40px;flex-wrap:wrap;margin-bottom:clamp(40px,7vh,80px)}
+.cv__grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.cv__item{grid-column:span 4;background:var(--paper-2);border-radius:24px;padding:clamp(24px,2.6vw,40px);display:flex;flex-direction:column;gap:16px;position:relative;overflow:hidden;transition:background .6s,color .6s;min-height:380px}
+.cv__item:nth-child(1),.cv__item:nth-child(2){grid-column:span 6}
+.cv__item:hover{background:#e6dfd1}
+.cv__item::after{content:"";position:absolute;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(200,146,90,.16),transparent 70%);left:var(--mx,50%);top:var(--my,50%);transform:translate(-50%,-50%);opacity:0;transition:opacity .5s;pointer-events:none}
+.cv__item:hover::after{opacity:1}
+.cv__top{display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:500;color:var(--copper)}
+.cv__icon{width:52px;height:52px;border-radius:50%;border:1px solid var(--line-l);display:grid;place-items:center;transition:border-color .6s}
+.cv__icon svg{width:22px;height:22px;stroke:var(--copper);fill:none;stroke-width:1.4}
+.cv__item h3{font-family:var(--serif);font-weight:300;font-size:clamp(24px,2.1vw,32px);line-height:1.08;letter-spacing:-.02em}
+.cv__lead{font-family:var(--serif);font-style:italic;color:var(--copper);font-size:18px}
+.cv__item p:last-child{font-size:15px;opacity:.72;margin-top:auto}
+@media (max-width:1000px){.cv__item,.cv__item:nth-child(1),.cv__item:nth-child(2){grid-column:span 12;min-height:0}}
+
+/* cta */
+.cta{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:clamp(120px,16vh,200px) 0;overflow:hidden;position:relative}
+.cta__big{font-family:var(--serif);font-weight:300;font-size:clamp(56px,10.5vw,190px);line-height:.9;letter-spacing:-.05em;white-space:nowrap}
+.cta__big em{color:var(--copper-2)}
+.cta__row{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;margin-top:clamp(40px,8vh,90px)}
+.cta__row p{max-width:460px;color:rgba(244,240,232,.7);font-size:clamp(16px,1.3vw,20px)}
+.magnet{width:clamp(150px,13vw,190px);aspect-ratio:1;border-radius:50%;background:var(--copper);color:var(--ink);display:grid;place-items:center;text-align:center;font-weight:500;font-size:15px;line-height:1.3;position:relative;transition:background .4s}
+.magnet:hover{background:var(--copper-2)}
+.magnet span{display:block;pointer-events:none}
+.magnet svg{width:22px;height:22px;margin:10px auto 0;display:block}
+.magnet::before{content:"";position:absolute;inset:-14px;border-radius:50%;border:1px solid rgba(200,146,90,.25)}
+
+.cta__mail{display:inline-block;margin-top:24px;font-family:var(--serif);font-style:italic;font-size:clamp(20px,2vw,28px);color:var(--paper);border-bottom:1px solid var(--copper);padding-bottom:2px}
+@media (max-width:760px){.cta__row{grid-template-columns:1fr}.cta__big{white-space:normal}}
+
+/* footer */
+.footer{background:var(--ink);border-top:1px solid var(--line-d);overflow:hidden;padding-top:64px}
+.footer__top{display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap;font-size:14px;color:rgba(244,240,232,.65)}
+.footer__top nav{display:flex;gap:28px;flex-wrap:wrap}
+.footer__top a:hover{color:var(--copper-2)}
+.footer__word{font-family:var(--serif);font-weight:300;font-size:clamp(96px,20vw,360px);line-height:.78;letter-spacing:-.06em;text-align:center;margin-top:40px;color:#16271f;user-select:none;transform:translateY(12%)}
+.footer__word i{color:#1f3329}
+
+/* reveal utility */
+.rv{opacity:0;transform:translateY(24px)}
+.no-js .rv,.reduced .rv{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.grain,.scroll-ind__line::after{animation:none}}
+</style>
+</head>
+<body class="loading">
+<div class="grain" aria-hidden="true"></div>
+
+<!-- Preloader -->
+<div class="loader" aria-hidden="true">
+  <div class="loader__word"><span>a</span><span>g</span><span>u</span><span>l</span><span>a</span><span>.</span></div>
+  <div class="loader__tag">Kanzlei-Entwicklung auf Augenhöhe</div>
+  <div class="loader__bar"></div>
+</div>
+
+<!-- Nav -->
+<header class="nav" id="nav">
+  <a href="#top" class="logo">agula<i>.</i></a>
+  <nav class="nav__links" aria-label="Hauptnavigation">
+    <a href="#ansatz">Ansatz</a>
+    <a href="#reise">Ablauf</a>
+    <a href="#taetigkeiten">Tätigkeiten</a>
+    <a href="#ueber-mich">Über mich</a>
+  </nav>
+  <a class="pill" href="https://calendly.com/thomas-agula-entwicklung/cafe-pause" target="_blank" rel="noopener">Lass uns reden <span class="pill__dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10 10 2M4 2h6v6"/></svg></span></a>
+  <button class="burger" aria-label="Menü öffnen" id="burger"><span></span><span></span></button>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#ansatz">Ansatz</a>
+  <a href="#reise">Ablauf</a>
+  <a href="#taetigkeiten">Tätigkeiten</a>
+  <a href="#ueber-mich">Über mich</a>
+  <a href="#kontakt">Kontakt</a>
+</div>
+
+<main id="top">
+<!-- HERO -->
+<section class="hero" aria-label="Einleitung">
+  <canvas id="flow" aria-hidden="true"></canvas>
+  <div class="hero__veil"></div>
+  <div class="wrap hero__inner">
+    <div class="hero__meta">
+      <span class="eyebrow hero-fade">Thomas Göttel · Stuttgart</span>
+      <span class="eyebrow hero-fade">Kanzlei-Entwicklung auf Augenhöhe</span>
+    </div>
+    <h1>
+      <span class="line"><span>Digitalisierung für</span></span>
+      <span class="line"><span>Kanzleien &amp; Unternehmen.</span></span>
+      <span class="line"><span><em>Menschlich. Zukunftssicher.</em></span></span>
+    </h1>
+    <div class="hero__bottom">
+      <p class="hero__lede hero-fade">Ich helfe Kanzleien dabei, digitale Prozesse nicht nur technisch umzusetzen, sondern sie im Team zu verankern. Praxisnah, auf Augenhöhe und mit Wirkung, die bleibt.</p>
+      <div class="hero__ctas hero-fade">
+        <a class="pill pill--solid" href="https://calendly.com/thomas-agula-entwicklung/cafe-pause" target="_blank" rel="noopener">Café-Pause buchen <span class="pill__dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10 10 2M4 2h6v6"/></svg></span></a>
+        <a class="pill" href="mailto:thomas@agula-entwicklung.de?subject=Kanzlei%20Entwicklung%20erst%20Kontakt">Kontakt <span class="pill__dot"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 3h10v7H1zM1 3l5 4 5-4"/></svg></span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFEST -->
+<section class="manifest">
+  <div class="wrap manifest__grid">
+    <div class="manifest__side">
+      <span class="eyebrow">Haltung</span>
+      <p style="margin-top:22px">Daten, Zahlen und Tools sind wichtig, aber sie ersetzen keine Erfahrung, keine echte Zusammenarbeit und keine übernommene Verantwortung.</p>
+      <p>Digitalisierung soll leichter machen, nicht schwerer.</p>
+    </div>
+    <p class="manifest__text" id="manifest">Digitalisierung ist kein IT-Projekt. Es ist eine <em>Reise.</em> Eine gemeinsame. Mit Höhen, mit Tiefen und mit Menschen im Mittelpunkt.</p>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="values light" id="ansatz">
+  <div class="wrap">
+    <div class="values__head">
+      <div>
+        <span class="eyebrow rv">Mein Ansatz</span>
+        <h2 class="h2 rv" style="margin-top:22px">Bei der Digitalisierung<br>ist dir <em>wichtig:</em></h2>
+      </div>
+      <p class="rv">Drei Versprechen, die jede Zusammenarbeit tragen: für dein Team, für deine Mandanten und für dich als Kanzleileitung.</p>
+    </div>
+    <div class="stack">
+      <article class="card" style="--i:0">
+        <div class="card__media"><img src="https://agula-entwicklung.de/Sn2oOJyqvgTbbcHopGs_Z.webp" alt="Zufriedene Mitarbeitende" loading="lazy"><span class="card__num">01</span></div>
+        <div class="card__body">
+          <div>
+            <div class="card__label">Für dein Team</div>
+            <h3>Zufriedene Mitarbeitende statt Erschöpfung und Frust.</h3>
+          </div>
+          <p class="card__approach">Gemeinsam mit den Mitarbeitenden erarbeiten wir Standardprozesse, die wirklich helfen. Dazu kommen wöchentliche Meetings für Fragen, individuelle Schulungen und aktive Mitarbeit bei der Einrichtung.</p>
+          <div class="more">
+            <button class="more__btn" aria-expanded="false">Mehr lesen <span class="plus"></span></button>
+            <div class="more__panel"><div><p>Gemeinsam mit euren Mitarbeitenden entwerfen wir im Workshop-Format Standardprozesse, legen Rollen und Verantwortlichkeiten fest und definieren Kriterien für den Erfolg. In wöchentlichen Terminen besprechen wir aktuelle Herausforderungen, klären Fragen und heben Stärken hervor, damit das Selbstvertrauen in die Digitalisierung wächst. Für einen leichten Einstieg kümmere ich mich um die Einrichtung von Unternehmen online.</p></div></div>
+          </div>
+        </div>
+      </article>
+      <article class="card" style="--i:1">
+        <div class="card__media"><img src="https://agula-entwicklung.de/pevkcMluSucBdlij-wqCv_(1).webp" alt="Gemeinsam wachsen" loading="lazy"><span class="card__num">02</span></div>
+        <div class="card__body">
+          <div>
+            <div class="card__label">Für deine Mandanten</div>
+            <h3>Gemeinsam wachsen statt jeder für sich.</h3>
+          </div>
+          <p class="card__approach">Ein Prozess, der alle Kontaktpunkte vom Belegfluss bis zum Jahresabschluss abdeckt und Kanzlei, Buchhaltenden und Mandanten gleichermaßen dient.</p>
+          <div class="more">
+            <button class="more__btn" aria-expanded="false">Mehr lesen <span class="plus"></span></button>
+            <div class="more__panel"><div><p>Gemeinsam erarbeiten wir einen durchgängigen digitalen Prozess, vom Belegeingang und -ausgang beim Mandanten bis zur Verbuchung in der Kanzlei. Ich schaue mir an, wie der Belegfluss beim Mandanten heute abläuft und welche Vorsysteme es gibt, und schule alle Prozessbeteiligten. Ziel ist größtmögliche Automatisierung, ohne die Bedürfnisse von Kanzlei und Mandanten aus dem Blick zu verlieren, damit beide Seiten gerne mit dem Prozess arbeiten.</p></div></div>
+          </div>
+        </div>
+      </article>
+      <article class="card" style="--i:2">
+        <div class="card__media"><img src="https://agula-entwicklung.de/iMRjJdX7z0cw5KnEwieoD.webp" alt="Kanzleileitung mit Fokus" loading="lazy"><span class="card__num">03</span></div>
+        <div class="card__body">
+          <div>
+            <div class="card__label">Für dich als Kanzleileitung</div>
+            <h3>Du behältst den Fokus im Alltag, und es geht trotzdem voran.</h3>
+          </div>
+          <p class="card__approach">Wir legen Ziele fest, dann arbeite ich aktiv mit deinem Team an der Umsetzung. In quartalsweisen Meetings sprechen wir über Erfolge, Herausforderungen und die nächsten Schritte.</p>
+          <div class="more">
+            <button class="more__btn" aria-expanded="false">Mehr lesen <span class="plus"></span></button>
+            <div class="more__panel"><div><p>Zu Beginn sprechen wir über Erwartungen an die Zusammenarbeit und definieren eine gemeinsame Definition von Erfolg, denn jede Person versteht etwas anderes darunter. Mein Ziel ist es, die Kompetenzen langsam und nachhaltig in der Kanzlei zu verankern. Für den Einstieg kümmern wir uns um Unternehmen online, Rechteverwaltung und Schnittstellen und geben dieses Wissen Stück für Stück weiter. Dein Fokus liegt weiter auf dem Tagesgeschäft, meiner auf der Digitalisierung der Kanzlei.</p></div></div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY / ABLAUF -->
+<section class="journey" id="reise">
+  <div class="wrap journey__intro">
+    <span class="eyebrow rv">Ablauf · 7 Etappen</span>
+    <div class="journey__intro-row" style="margin-top:22px">
+      <h2 class="h2 rv">So reisen wir <em>gemeinsam.</em></h2>
+      <p class="rv">Klar strukturiert, transparent und praxisnah. Jede Etappe baut auf der vorherigen auf, bis Digitalisierung zum Alltag geworden ist.</p>
+    </div>
+  </div>
+  <div class="track-wrap" id="trackWrap">
+    <div class="track" id="track">
+      <svg class="route" id="route" aria-hidden="true"><path class="route__bg" id="routeBg"/><path id="routeFg"/></svg>
+      <div class="station"><div class="station__dot"></div><div class="station__n">01</div><h3>Erwartungen &amp; Startpunkt klären</h3><p>Wir sprechen über Erwartungen und darüber, wie wir zusammenarbeiten wollen. Wir definieren gemeinsam, was Erfolg bedeutet, legen den Startpunkt fest und beschließen fünf Meilensteine für die Reise.</p></div>
+      <div class="station"><div class="station__dot"></div><div class="station__n">02</div><h3>Team verstehen: ehrliche Standortbestimmung</h3><p>Ich spreche mit den Mitarbeitenden und lerne den Kanzleialltag kennen. Was läuft gut? Was erzeugt Frust? Wie funktionieren Prozesse und Mandantenkommunikation? Kurz, ehrlich, gemeinsam.</p></div>
+      <div class="station"><div class="station__dot"></div><div class="station__n">03</div><h3>Workshop: Standardprozesse entwickeln</h3><p>Im Workshop-Format entwerfen wir mit euren Mitarbeitenden Standardprozesse, legen Rollen und Verantwortlichkeiten fest und definieren Kriterien für den Erfolg.</p></div>
+      <div class="station"><div class="station__dot"></div><div class="station__n">04</div><h3>Aktivierung in kleinen Gruppen</h3><p>In wöchentlichen Weeklys besprechen wir Herausforderungen, klären Fragen und heben Stärken hervor. Läuft eine Gruppe, folgt die nächste. Das ist der Multiplikator-Effekt.</p></div>
+      <div class="station"><div class="station__dot"></div><div class="station__n">05</div><h3>Unterstützung durch mich &amp; mein Team</h3><p>Für den Einstieg übernehme ich Unternehmen online, Rechteverwaltung und Schnittstellen und gebe das Wissen Stück für Stück weiter. Auf Wunsch begleite ich auch Mandantengespräche für den Umstieg.</p></div>
+      <div class="station"><div class="station__dot"></div><div class="station__n">06</div><h3>Umsetzung beim Mandanten</h3><p>Immer im Tandem mit Mandant und Kanzlei, für einen Prozess, mit dem beide Seiten gerne arbeiten.</p>
+        <div class="station__split"><div><b>Kurzprojekt</b>IST-Analyse, SOLL nach Standardprozess, Setup &amp; Schulung. Schnell spürbar.</div><div><b>Langprojekt</b>Detaillierte IST-Erhebung, SOLL-Design, phasenweiser Rollout. Nachhaltig bei komplexen Fällen.</div></div></div>
+      <div class="station"><div class="station__dot"></div><div class="station__n">07</div><h3>Quartals-Meetings mit der Kanzleileitung</h3><p>Wir schauen auf Erfolge und Herausforderungen, priorisieren neu und planen den weiteren Verlauf. So bleibt Digitalisierung steuerbar, menschlich und zukunftsorientiert.</p></div>
+      <div class="station station--end"><div class="station__dot"></div><p class="serif">Bis aus Veränderung <span class="it">Vertrauen</span> entsteht.</p></div>
+    </div>
+    <div class="journey__progress" aria-hidden="true"><span>Start</span><div class="journey__progress-bar"><i id="jbar"></i></div><span>Ziel</span></div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services light" id="taetigkeiten">
+  <div class="wrap">
+    <div class="services__head">
+      <div>
+        <span class="eyebrow rv">Tätigkeiten</span>
+        <h2 class="h2 rv" style="margin-top:22px">Fachlichkeit trifft <em>Menschlichkeit.</em></h2>
+      </div>
+      <div class="rv">
+        <p>Ich unterstütze Steuerkanzleien dabei, Prozesse zu optimieren, digitale Strukturen aufzubauen und ein Umfeld zu schaffen, in dem Mandanten und Mitarbeitende gerne arbeiten. Praxisnah, umsetzbar und nachhaltig.</p>
+        <span class="services__claim">Bewusst. Menschlich. Zukunftssicher.</span>
+      </div>
+    </div>
+
+    <div class="svc-list" id="svcList">
+      <div class="svc"><button class="svc__row" aria-expanded="false"><span class="svc__n">01</span><span class="svc__title">Digitalisierung &amp; Prozessarchitektur</span><span class="plus"></span></button>
+        <div class="svc__body"><div><div class="svc__inner"><span></span><ul class="svc__list">
+          <li class="sub">Digitale Beleg- &amp; Buchhaltungsprozesse</li><li>Einrichtung &amp; Optimierung von DATEV Unternehmen Online</li><li>Auftragswesen Next, Belegfreigabe Online, Bank Online</li><li>Schnittstellen zu DUO, Kanzlei-Rechnungswesen &amp; Mittelstand Faktura</li><li>Automatisierung in Kanzlei-Rechnungswesen</li><li>ESt-Prozesse über DATEV Meine Steuern inkl. Schulungen</li>
+          <li class="sub">Rechteverwaltung &amp; DATEV-Cloud-Welt</li><li>Rollen- und Rechtekonzepte</li><li>Lizenzmanagement in der neuen DATEV-Cloud-Welt</li>
+        </ul><div class="svc__why"><b>Warum das wichtig ist</b><p>Klare Rechte und stabile Prozesse schaffen Sicherheit, Effizienz und Skalierbarkeit.</p></div></div></div></div></div>
+
+      <div class="svc"><button class="svc__row" aria-expanded="false"><span class="svc__n">02</span><span class="svc__title">Zusammenarbeit &amp; Prozessentwicklung</span><span class="plus"></span></button>
+        <div class="svc__body"><div><div class="svc__inner"><span></span><ul class="svc__list">
+          <li class="sub">Mitarbeiterentwicklung &amp; Kommunikation</li><li>Selbst- &amp; Zeitmanagement</li><li>Kommunikation mit Mandanten &amp; Kollegen</li><li>Analyse &amp; Optimierung bestehender Abläufe</li><li>Entwicklung von Standardprozessen</li><li>Rollen- &amp; Verantwortungskonzepte</li><li>Mitarbeiterbefragungen, Schulungen &amp; Workshops</li><li>Mitarbeiterbindung, Gewinnung &amp; Onboarding</li>
+        </ul><div class="svc__why"><b>Warum das wichtig ist</b><p>Tools funktionieren nur, wenn Menschen sie sinnvoll nutzen. Klarheit steigert Qualität, Tempo und Zufriedenheit.</p></div></div></div></div></div>
+
+      <div class="svc"><button class="svc__row" aria-expanded="false"><span class="svc__n">03</span><span class="svc__title">Mandantenbestand: Analyse &amp; Steuerung</span><span class="plus"></span></button>
+        <div class="svc__body"><div><div class="svc__inner"><span></span><ul class="svc__list">
+          <li>Dubletten bereinigen</li><li>Mandantentyp 2 bereinigen</li><li>Analyse nach Deckungsbeitrag &amp; weichen Kriterien</li><li>Priorisierung nach Betreuungsbedarf</li><li>Projektmanagement &amp; Prozesssteuerung</li>
+        </ul><div class="svc__why"><b>Warum das wichtig ist</b><p>Weiche Kriterien beeinflussen Fokus, Stimmung und Team-Tempo unmittelbar.</p></div></div></div></div></div>
+
+      <div class="svc"><button class="svc__row" aria-expanded="false"><span class="svc__n">04</span><span class="svc__title">On- &amp; Offboarding von Mandanten</span><span class="plus"></span></button>
+        <div class="svc__body"><div><div class="svc__inner"><span></span><ul class="svc__list">
+          <li class="sub">Onboarding</li><li>Richtlinien zur Erfassung aller Stammdaten</li><li>Einstieg in DUO, Module, Rechte, Abläufe</li><li>Digitales Onboarding</li>
+          <li class="sub">Offboarding</li><li>Abmelden relevanter Module</li><li>Archivierung &amp; Datenrückgabe</li><li>Verantwortlichkeiten und Fristen dokumentieren</li>
+        </ul><div class="svc__why"><b>Warum das wichtig ist</b><p>Saubere Prozesse verhindern Kosten, Datenwildwuchs und Compliance-Risiken.</p></div></div></div></div></div>
+
+      <div class="svc"><button class="svc__row" aria-expanded="false"><span class="svc__n">05</span><span class="svc__title">Wissensmanagement</span><span class="plus"></span></button>
+        <div class="svc__body"><div><div class="svc__inner"><span></span><ul class="svc__list">
+          <li>Aufbau &amp; Pflege einer Wissensdatenbank</li><li>Dokumentation von Standards &amp; Arbeitsanweisungen</li><li>Umgang mit Updates</li><li>Eine lernende Kanzlei-Atmosphäre fördern</li>
+        </ul><div class="svc__why"><b>Warum das wichtig ist</b><p>Wissen muss leichter zugänglich sein, als Kollegen zu fragen.</p></div></div></div></div></div>
+
+      <div class="svc"><button class="svc__row" aria-expanded="false"><span class="svc__n">06</span><span class="svc__title">Technologie, Automatisierung &amp; KI</span><span class="plus"></span></button>
+        <div class="svc__body"><div><div class="svc__inner"><span></span><ul class="svc__list">
+          <li>Einführung moderner Tools &amp; KI</li><li>Microsoft Teams: Struktur, Kanäle, Governance</li><li>Microsoft Copilot inkl. KI-Agents</li><li>Schulungen zu ChatGPT, Haufe KI &amp; weiteren KI-Tools</li><li>Workflows, Vorlagen &amp; Prompts</li>
+        </ul><div class="svc__why"><b>Warum das wichtig ist</b><p>Struktur und klare Regeln bringen Tempo, Qualität und Spaß am Arbeiten.</p></div></div></div></div></div>
+
+      <div class="svc"><button class="svc__row" aria-expanded="false"><span class="svc__n">07</span><span class="svc__title">Sichtbarkeit &amp; Kommunikation</span><span class="plus"></span></button>
+        <div class="svc__body"><div><div class="svc__inner"><span></span><ul class="svc__list">
+          <li>Social-Media-Strategie (LinkedIn, Instagram)</li><li>Content-Plan &amp; Teilautomatisierung</li><li>Kultur &amp; Arbeitsweise sichtbar machen</li><li>Relevanz für Mitarbeitergewinnung &amp; passende Mandate</li>
+        </ul><div class="svc__why"><b>Warum das wichtig ist</b><p>Sichtbare Kultur zieht passende Menschen und Mandanten an.</p></div></div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<section class="clients light" aria-label="Aktuelle Mitreisende">
+  <div class="wrap clients__head">
+    <div><span class="eyebrow rv">Aktuelle Mitreisende</span></div>
+    <p class="serif rv">Kanzleien, die den Weg <span class="it">schon gehen.</span></p>
+  </div>
+  <div class="wrap logos rv">
+    <a class="client" href="https://kanzlei-ehf.de/" target="_blank" rel="noopener"><img src="https://agula-entwicklung.de/logos/Engert_Holtmann_Fleischer_Logo.webp" alt="Steuerkanzlei Engert Holtmann Fleischer"><span>Steuerkanzlei Engert Holtmann Fleischer</span></a>
+    <a class="client" href="https://www.eswicon.de/" target="_blank" rel="noopener"><img src="https://agula-entwicklung.de/logos/Eswicon_Logo.webp" alt="Eswicon"><span>Eswicon · Steuerberatung &amp; Wirtschaftsprüfung</span></a>
+    <a class="client" href="https://pflegedienstdaheim.de/Home/" target="_blank" rel="noopener"><img src="https://agula-entwicklung.de/logos/Pflege_Daheim_Logo.webp" alt="Pflegedienst Daheim"><span>Pflegedienst Daheim</span></a>
+    <a class="client" href="https://gornik-partner.de/" target="_blank" rel="noopener"><img src="https://agula-entwicklung.de/logos/Logo_GoPa.webp" alt="Gornik &amp; Partner"><span>Gornik &amp; Partner</span></a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="ueber-mich">
+  <div class="wrap about__grid">
+    <div class="portrait" id="portrait">
+      <img src="https://agula-entwicklung.de/IMG_0123.webp" alt="Thomas Göttel, Digitalisierungsberater für Kanzleien">
+      <div class="portrait__tag"><b>Thomas Göttel</b><span>B.Sc. Wirtschaftsinformatik</span></div>
+    </div>
+    <div class="about__text">
+      <span class="eyebrow rv">Über mich</span>
+      <h2 class="h2 rv">Digitalisierung, <em>in Menschlich.</em></h2>
+      <p class="rv">Hallo, ich bin Thomas. Ich gehe auf diese Reise, weil <strong>Digitalisierung ohne Menschlichkeit keinen Sinn hat.</strong> Ich will verstehen, wofür Systeme existieren und wie man sie so weiterentwickelt, dass sie Menschen wirklich unterstützen.</p>
+      <p class="rv">Nicht die Technik steht im Mittelpunkt, sondern Klarheit, echte Entlastung und Raum für Beratung. Ich komme, um mit euch eine Organisation zu bauen, die funktioniert: technisch, menschlich und kulturell.</p>
+      <ul class="dest rv">
+        <li><i>→</i><span>Zu Systemen, die entlasten statt überfordern.</span></li>
+        <li><i>→</i><span>Zu Teams, die miteinander wachsen statt nebeneinander arbeiten.</span></li>
+        <li><i>→</i><span>Zu Organisationen, die stabil bleiben, auch wenn alles schneller wird.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="quote">
+  <figure class="wrap">
+    <blockquote id="quote">„Warum haben wir das nicht <em>früher</em> gemacht?“</blockquote>
+    <figcaption>Das Ziel jeder Reise: bis deine Mitarbeitenden genau das sagen.</figcaption>
+  </figure>
+</section>
+
+<!-- CV -->
+<section class="cv light">
+  <div class="wrap">
+    <div class="cv__head">
+      <div><span class="eyebrow rv">Highlights aus dem Lebenslauf</span><h2 class="h2 rv" style="margin-top:22px">Erfahrung aus <em>fünf Welten.</em></h2></div>
+    </div>
+    <div class="cv__grid">
+      <article class="cv__item rv"><div class="cv__top"><span>ESWICON GmbH StBG · 3+ Jahre</span><span class="cv__icon"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg></span></div><h3>Digitalisierung &amp; Kanzleipraxis</h3><p class="cv__lead">Digitale Prozesse in der Realität erlebt.</p><p>Vom Mitarbeiter-Onboarding über Rechteverwaltung bis zum digitalen Belegfluss: Hier habe ich verstanden, wie Systeme funktionieren müssen, damit sie im Alltag wirklich entlasten.</p></article>
+      <article class="cv__item rv"><div class="cv__top"><span>DATEV-Trainings</span><span class="cv__icon"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 16.5h7M16.5 13v7"/></svg></span></div><h3>DATEV-Schulungen &amp; Prozesskompetenz</h3><p class="cv__lead">Fachliche Tiefe trifft Systemblick.</p><p>Zahlreiche DATEV-Trainings, u. a. Rechteverwaltung Online, digitaler Belegfluss und Bestandsoptimierung. Technik, Organisation und der menschliche Faktor werden zu einem klaren Prozessdesign.</p></article>
+      <article class="cv__item rv"><div class="cv__top"><span>Trader · 4 Jahre</span><span class="cv__icon"><svg viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 8-9M15 7h5v5"/></svg></span></div><h3>Disziplin, Muster &amp; Emotionen</h3><p class="cv__lead">Daten lesen. Muster erkennen. Stabil bleiben.</p><p>Klare Entscheidungen unter Druck und Systeme, denen man vertrauen kann. Disziplin, Fokus und Emotionskontrolle tragen heute meine Beratung.</p></article>
+      <article class="cv__item rv"><div class="cv__top"><span>B.Sc.</span><span class="cv__icon"><svg viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5zM6 11v5c3 2.5 9 2.5 12 0v-5"/></svg></span></div><h3>Wirtschaftsinformatik</h3><p class="cv__lead">Wissenschaftlich fundiert, praktisch relevant.</p><p>Bachelorarbeit: ein Entscheidungsmodell für Kanzleien zur Frage Inhouse-Server-Upgrade oder PARTNERasp-Migration.</p></article>
+      <article class="cv__item rv"><div class="cv__top"><span>Digitalnomade · 1+ Jahre</span><span class="cv__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg></span></div><h3>Interkulturelle Erfahrung</h3><p class="cv__lead">Perspektivenwechsel, Menschen, Kommunikation.</p><p>Studiert und gleichzeitig in verschiedensten Ländern gelebt. Dabei habe ich gelernt, wie unterschiedlich Menschen arbeiten, denken und entscheiden.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="kontakt">
+  <div class="wrap">
+    <span class="eyebrow rv">Kontakt</span>
+    <h2 class="cta__big" style="margin-top:28px"><span class="cta-line" style="display:block">Lass uns</span><span class="cta-line" style="display:block;padding-left:clamp(0px,12vw,240px)"><em>reden.</em></span></h2>
+    <div class="cta__row">
+      <div class="rv">
+        <p>Ein Kaffee, eine halbe Stunde, ein ehrlicher Blick auf deine Kanzlei. Unverbindlich und auf Augenhöhe.</p>
+        <a class="cta__mail" href="mailto:thomas@agula-entwicklung.de?subject=Kanzlei%20Entwicklung%20erst%20Kontakt">thomas@agula-entwicklung.de</a>
+      </div>
+      <a class="magnet" id="magnet" href="https://calendly.com/thomas-agula-entwicklung/cafe-pause" target="_blank" rel="noopener"><span>Café-Pause<br>buchen<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM17 10h1.5a2.5 2.5 0 0 1 0 5H17M8 3v3M12 3v3"/></svg></span></a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__top">
+    <span>© 2026 Thomas Göttel · agula-entwicklung.de</span>
+    <nav>
+      <a href="#reise">Ablauf</a>
+      <a href="#taetigkeiten">Tätigkeiten</a>
+      <a href="https://www.linkedin.com/in/thomas-goettel/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="impressum.html">Impressum</a>
+      <a href="https://agula-entwicklung.de/datenschutz" target="_blank" rel="noopener">Datenschutz</a>
+    </nav>
+  </div>
+  <div class="footer__word" aria-hidden="true">agula<i>.</i></div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+(() => {
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+scrollTo(0,0);
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
+const hasGsap = typeof gsap !== 'undefined';
+if (!hasGsap || reduced) document.documentElement.classList.add('reduced');
+
+/* ---------- Hero flow field (Belegfluss / Wasserfall) ---------- */
+const cv = document.getElementById('flow'), ctx = cv.getContext('2d');
+let W, H, DPR, parts = [], mouse = {x:-9999,y:-9999}, t = 0, heroVisible = true;
+function resize(){
+  DPR = Math.min(devicePixelRatio || 1, 2);
+  W = cv.clientWidth; H = cv.clientHeight;
+  cv.width = W * DPR; cv.height = H * DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
+  const n = Math.min(700, Math.floor(W * H / 2200));
+  parts = Array.from({length:n}, () => spawn(true));
+}
+function spawn(any){
+  return {x:Math.random()*W, y:any?Math.random()*H:-10, v:.35+Math.random()*.75, life:0,
+    c: Math.random()<.1 ? 'rgba(229,189,143,' : (Math.random()<.5 ? 'rgba(159,181,165,' : 'rgba(244,240,232,'),
+    a: .12 + Math.random()*.3, w: Math.random()<.08 ? 1.2 : .6};
+}
+function field(x,y){
+  return Math.sin(x*.004 + t*.6) * .9 + Math.cos(y*.006 - t*.4) * .6 + Math.sin((x+y)*.002 + t*.3) * .5;
+}
+function draw(){
+  if (heroVisible){
+    t += .004;
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = 'rgba(0,0,0,0.09)'; ctx.fillRect(0,0,W,H);
+    ctx.globalCompositeOperation = 'source-over';
+    for (const p of parts){
+      const ang = Math.PI/2 + field(p.x,p.y)*.55;
+      let vx = Math.cos(ang)*p.v, vy = Math.sin(ang)*p.v*1.4;
+      const dx = p.x-mouse.x, dy = p.y-mouse.y, d2 = dx*dx+dy*dy;
+      if (d2 < 12000){ const f = (12000-d2)/12000; vx += dx/Math.sqrt(d2+1)*f*1.4; vy += dy/Math.sqrt(d2+1)*f*.7; }
+      ctx.strokeStyle = p.c + p.a + ')'; ctx.lineWidth = p.w;
+      ctx.beginPath(); ctx.moveTo(p.x,p.y); p.x += vx; p.y += vy; ctx.lineTo(p.x,p.y); ctx.stroke();
+      if (p.y > H+10 || p.x < -10 || p.x > W+10) Object.assign(p, spawn(false));
+    }
+  }
+  if (!reduced) requestAnimationFrame(draw);
+}
+resize(); addEventListener('resize', resize);
+if (reduced){ for(let i=0;i<120;i++){ t+=.05; draw(); } } else draw();
+document.querySelector('.hero').addEventListener('pointermove', e => { const r = cv.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; });
+document.querySelector('.hero').addEventListener('pointerleave', () => { mouse.x = mouse.y = -9999; });
+new IntersectionObserver(([e]) => heroVisible = e.isIntersecting).observe(cv);
+
+/* ---------- Accordions ---------- */
+document.querySelectorAll('.more__btn').forEach(b => b.addEventListener('click', () => {
+  const m = b.parentElement, o = m.classList.toggle('is-open'); b.setAttribute('aria-expanded', o);
+  b.firstChild.textContent = o ? 'Weniger ' : 'Mehr lesen ';
+  setTimeout(() => hasGsap && ScrollTrigger.refresh(), 850);
+}));
+document.querySelectorAll('.svc__row').forEach(b => b.addEventListener('click', () => {
+  const s = b.parentElement, o = !s.classList.contains('is-open');
+  document.querySelectorAll('.svc.is-open').forEach(x => { x.classList.remove('is-open'); x.firstElementChild.setAttribute('aria-expanded', false); });
+  if (o){ s.classList.add('is-open'); b.setAttribute('aria-expanded', true); }
+  setTimeout(() => hasGsap && ScrollTrigger.refresh(), 950);
+}));
+
+/* ---------- Mobile menu ---------- */
+const burger = document.getElementById('burger');
+burger.addEventListener('click', () => document.body.classList.toggle('menu-open'));
+document.querySelectorAll('#mobileMenu a').forEach(a => a.addEventListener('click', () => document.body.classList.remove('menu-open')));
+
+/* ---------- Marquee duplicate ---------- */
+
+/* ---------- CV spotlight ---------- */
+document.querySelectorAll('.cv__item').forEach(el => el.addEventListener('pointermove', e => {
+  const r = el.getBoundingClientRect(); el.style.setProperty('--mx', (e.clientX-r.left)+'px'); el.style.setProperty('--my', (e.clientY-r.top)+'px');
+}));
+
+if (!hasGsap || reduced){
+  document.querySelector('.loader').remove(); document.body.classList.remove('loading');
+  document.querySelectorAll('.quote .ch').forEach(c => c.style.cssText='opacity:1;transform:none;filter:none');
+  document.getElementById('portrait').style.clipPath = 'none';
+  return;
+}
+
+gsap.registerPlugin(ScrollTrigger);
+
+/* ---------- Smooth scroll ---------- */
+const lenis = new Lenis({ lerp:.09, wheelMultiplier:1 });
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(t => lenis.raf(t*1000)); gsap.ticker.lagSmoothing(0);
+lenis.stop();
+document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+  const id = a.getAttribute('href'); if (id.length < 2 && id !== '#top') return;
+  const tgt = id === '#top' ? 0 : document.querySelector(id); if (tgt === null) return;
+  e.preventDefault(); lenis.scrollTo(tgt, { offset: 0, duration: 1.6 });
+}));
+
+/* ---------- Nav hide/show ---------- */
+const nav = document.getElementById('nav'); let lastY = 0;
+lenis.on('scroll', ({scroll}) => {
+  nav.classList.toggle('is-scrolled', scroll > 40);
+  nav.classList.toggle('is-hidden', scroll > lastY && scroll > 400 && !document.body.classList.contains('menu-open'));
+  lastY = scroll;
+});
+
+/* ---------- Dezenter Magnet nur am Haupt-CTA ---------- */
+if (fine){
+  const el = document.getElementById('magnet');
+  el.addEventListener('pointermove', e => { const r = el.getBoundingClientRect(); gsap.to(el,{x:(e.clientX-r.left-r.width/2)*.12,y:(e.clientY-r.top-r.height/2)*.12,duration:.8,ease:'power3'}); });
+  el.addEventListener('pointerleave', () => gsap.to(el,{x:0,y:0,duration:.8,ease:'power3.out'}));
+}
+
+/* ---------- Preloader → Hero intro ---------- */
+const tl = gsap.timeline();
+tl.to('.loader__word span',{y:0,duration:.8,stagger:.04,ease:'expo.out'})
+  .to('.loader__bar',{scaleX:1,duration:.9,ease:'power2.inOut'},0)
+  .to('.loader',{opacity:0,duration:.6,ease:'power2.out'},'+=.15')
+  .add(() => { document.querySelector('.loader').remove(); document.body.classList.remove('loading'); lenis.start(); })
+  .from('.hero h1 .line > span',{yPercent:105,duration:1.2,stagger:.08,ease:'expo.out'},'-=.4')
+  .from('.hero-fade',{opacity:0,y:20,duration:1,stagger:.08,ease:'power3.out'},'-=1');
+
+/* hero parallax out */
+gsap.to('.hero__inner',{yPercent:-18,opacity:.2,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
+
+/* ---------- Generic reveals ---------- */
+ScrollTrigger.batch('.rv',{start:'top 88%',onEnter:b=>gsap.to(b,{opacity:1,y:0,duration:1.2,stagger:.1,ease:'expo.out'})});
+
+/* ---------- Manifest word scrub ---------- */
+const man = document.getElementById('manifest');
+(function splitWords(node){
+  [...node.childNodes].forEach(n => {
+    if (n.nodeType === 3){
+      const frag = document.createDocumentFragment();
+      n.textContent.split(/(\s+)/).forEach(w => { if (!w.trim()) frag.append(w); else { const s = document.createElement('span'); s.className='w'; s.textContent = w; frag.append(s);} });
+      n.replaceWith(frag);
+    } else splitWords(n);
+  });
+})(man);
+gsap.to('#manifest .w',{opacity:1,stagger:.08,ease:'none',scrollTrigger:{trigger:man,start:'top 75%',end:'bottom 45%',scrub:true}});
+
+/* ---------- Stacked cards ---------- */
+const cards = gsap.utils.toArray('.card');
+cards.forEach((card,i) => {
+  gsap.to(card.querySelector('img'),{yPercent:-6,ease:'none',scrollTrigger:{trigger:card,start:'top bottom',end:'bottom top',scrub:true}});
+  if (i < cards.length-1){
+    gsap.to(card,{scale:.92 + i*.02,filter:'brightness(.9)',ease:'none',scrollTrigger:{trigger:cards[i+1],start:'top bottom',end:'top 20%',scrub:true}});
+  }
+});
+
+/* ---------- Horizontal journey ---------- */
+const mm = gsap.matchMedia();
+mm.add('(min-width: 901px)', () => {
+  const track = document.getElementById('track'), wrap = document.getElementById('trackWrap');
+  const stations = gsap.utils.toArray('.station');
+  const route = document.getElementById('route'), fg = document.getElementById('routeFg'), bg = document.getElementById('routeBg');
+  function buildRoute(){
+    const w = track.scrollWidth; route.setAttribute('width', w); route.setAttribute('viewBox', `0 0 ${w} 200`);
+    route.style.top = (stations[0].offsetTop + stations[0].querySelector('.station__dot').offsetTop + 9 - 100) + 'px';
+    route.style.transform = 'none';
+    const pts = stations.map(s => s.offsetLeft + 9);
+    let d = `M ${pts[0]} 100`;
+    for (let i=1;i<pts.length;i++){ const mx = (pts[i-1]+pts[i])/2, a = i%2 ? 40 : 160; d += ` Q ${mx} ${a} ${pts[i]} 100`; }
+    fg.setAttribute('d', d); bg.setAttribute('d', d);
+    const L = fg.getTotalLength(); fg.style.strokeDasharray = L; fg.style.strokeDashoffset = L;
+    return L;
+  }
+  /* dots sit at top of each station: align route centerline with dot */
+  stations.forEach(s => s.querySelector('.station__dot').style.marginTop = '0');
+  let L = buildRoute();
+  const dist = () => Math.max(0, track.scrollWidth - innerWidth + parseFloat(getComputedStyle(track).paddingLeft));
+  const tween = gsap.to(track,{x:() => -dist(),ease:'none',scrollTrigger:{trigger:wrap,start:'top top',end:() => '+=' + dist(),pin:true,scrub:1,invalidateOnRefresh:true,
+    onRefresh:() => { L = buildRoute(); },
+    onUpdate:self => {
+      fg.style.strokeDashoffset = L * (1 - self.progress);
+      document.getElementById('jbar').style.transform = `scaleX(${self.progress})`;
+      const vx = innerWidth * .55;
+      stations.forEach(s => s.classList.toggle('is-active', s.getBoundingClientRect().left < vx));
+    }}});
+  stations.forEach(s => {
+    gsap.from(s.querySelectorAll('.station__n,h3,p,.station__split'),{y:60,opacity:0,stagger:.06,ease:'power3.out',
+      scrollTrigger:{trigger:s,containerAnimation:tween,start:'left 85%',end:'left 45%',scrub:true}});
+  });
+  return () => { fg.removeAttribute('style'); };
+});
+mm.add('(max-width: 900px)', () => {
+  gsap.utils.toArray('.station').forEach(s => {
+    ScrollTrigger.create({trigger:s,start:'top 60%',onToggle:self => s.classList.toggle('is-active', self.isActive || self.progress > 0),end:'max'});
+    gsap.from(s,{opacity:0,y:50,duration:1,ease:'expo.out',scrollTrigger:{trigger:s,start:'top 85%'}});
+  });
+});
+
+/* ---------- Service rows reveal ---------- */
+gsap.from('.svc',{opacity:0,y:40,stagger:.07,duration:1,ease:'expo.out',scrollTrigger:{trigger:'#svcList',start:'top 80%'}});
+
+/* ---------- Portrait clip reveal ---------- */
+gsap.timeline({scrollTrigger:{trigger:'#portrait',start:'top 85%',end:'center 50%',scrub:1}})
+  .to('#portrait',{clipPath:'inset(0% 0% 0% 0% round 28px)',ease:'none'})
+  .to('#portrait img',{scale:1,ease:'none'},0);
+gsap.to('#portrait img',{yPercent:-8,ease:'none',scrollTrigger:{trigger:'#portrait',start:'top bottom',end:'bottom top',scrub:true}});
+
+/* ---------- Quote char reveal ---------- */
+const q = document.getElementById('quote');
+(function splitChars(node){
+  [...node.childNodes].forEach(n => {
+    if (n.nodeType === 3){
+      const frag = document.createDocumentFragment();
+      n.textContent.split(/(\s+)/).forEach(w => {
+        if (!w.trim()){ frag.append(w); return; }
+        const word = document.createElement('span'); word.style.cssText = 'display:inline-block;white-space:nowrap';
+        [...w].forEach(ch => { const s = document.createElement('span'); s.className = 'ch'; s.textContent = ch; word.append(s); });
+        frag.append(word);
+      });
+      n.replaceWith(frag);
+    } else splitChars(n);
+  });
+})(q);
+gsap.to('#quote .ch',{opacity:1,y:0,stagger:.01,duration:1,ease:'power3.out',scrollTrigger:{trigger:q,start:'top 75%'}});
+gsap.from('.quote figcaption',{opacity:0,y:20,duration:1,delay:.8,scrollTrigger:{trigger:q,start:'top 75%'}});
+
+/* ---------- CTA big type ---------- */
+gsap.from('.cta-line',{xPercent:i => i ? 8 : -8,opacity:0,ease:'none',scrollTrigger:{trigger:'.cta',start:'top bottom',end:'top 25%',scrub:true}});
+
+/* ---------- Footer word ---------- */
+gsap.from('.footer__word',{yPercent:60,ease:'none',scrollTrigger:{trigger:'.footer',start:'top bottom',end:'bottom bottom',scrub:true}});
+
+addEventListener('load', () => { scrollTo(0,0); lenis.scrollTo(0,{immediate:true,force:true}); ScrollTrigger.refresh(); });
+})();
+</script>
+</body>
+</html>
